@@ -9,12 +9,35 @@ use Exception\InvalidCharacterException;
  */
 abstract class CharMap
 {
+private $a = '~!@#$%^&*_-+=`|(){}[]:;"\'<>,.?/';
+
     const MAP = [
         'a' => ['4', '@'],
         'b' => ['|3'],
-        'c' => ['(', '<'],
+        'c' => ['(', '<', '['],
         'd' => ['|)', 'o|'],
-        'e' => ['3', '&']
+        'e' => ['3', '&'],
+        'f' => ['f'],
+        'g' => ['9'],
+        'h' => ['#'],
+        'i' => ['!'],
+        'j' => ['_|'],
+        'k' => ['|<'],
+        'l' => ['|'],
+        'm' => ['|||'],
+        'n' => ['||'],
+        'o' => ['0', '[]'],
+        'p' => ['|>'],
+        'q' => ['<|'],
+        'r' => ['|~'],
+        's' => ['$'],
+        't' => ['7'],
+        'u' => ['|_|'],
+        'v' => ['|/'],
+        'w' => ['w'],
+        'x' => ['><'],
+        'y' => ['y'],
+        'z' => ['z']
     ];
 
     /**
@@ -24,13 +47,19 @@ abstract class CharMap
      */
     public static function transformLetter(string $char):string
     {
-        if (!array_key_exists(strtolower($char), self::MAP)) {
+        if (!ctype_alpha($char)) {
             throw new InvalidCharacterException();
         }
 
         $charMap = self::MAP[$char];
 
-        return $charMap[array_rand($charMap)];
+        $transformedChar = $charMap[array_rand($charMap)];
+
+        if ($transformedChar === $char) {
+            return $char;
+        }
+
+        return $transformedChar;
     }
 
     /**

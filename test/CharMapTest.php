@@ -13,9 +13,19 @@ class CharMapTest extends TestCase
     /**
      * @expectedException \Exception\InvalidCharacterException
      */
-    public function testTransformLetter()
+    public function testTransformLetterNonValidLetter()
     {
         CharMap::transformLetter('*');
+    }
+
+    public function testTransformLetterWithValidLetters()
+    {
+        $originalLetter = 'f';
+        $letter = CharMap::transformLetter($originalLetter);
+        $this->assertEquals($originalLetter, $letter);
+
+        $originalLetter = 'a';
+        $this->assertNotEquals($originalLetter, CharMap::transformLetter($originalLetter));
     }
 
     public function testGetRandomChar()
