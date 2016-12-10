@@ -40,6 +40,6 @@ final class HumanReadableGenerator implements PasswordGenerator
      */
     public function generate():string
     {
-        return '';
+        return 'a';
     }
 }

@@ -4,4 +4,4 @@ use Generator\HumanReadableGenerator;
 
 require __DIR__ . '/vendor/autoload.php';
 
-new HumanReadableGenerator([], 1, 1);
+echo (new HumanReadableGenerator([], 1, 1))->generate();

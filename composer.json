@@ -6,7 +6,15 @@
       "": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "GfkTest\\": "tests/"
+    }
+  },
   "require" : {
     "php": "7.0.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.7.*"
   }
 }
