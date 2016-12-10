@@ -11,7 +11,8 @@ use Validator\PasswordValidator;
  */
 final class HumanReadableGenerator implements PasswordGenerator
 {
-    const ADJUST = 0.05;
+    const ADJUST = 0.09;
+    const WORD_SEPARATOR = ',';
 
     /**
      * @var \SplQueue
@@ -60,18 +61,22 @@ final class HumanReadableGenerator implements PasswordGenerator
     {
         $password = '';
         $wordQuantity = $this->calculatePasswordStrength();
+        $probabilityToChange = ($this->complexity / 10) - self::ADJUST;
+        $tempPassword = '';
 
         for ($index = 0; $index < $wordQuantity; $index++) {
             $password .= $this->words->pop();
-        }
 
-        $probabilityToChange = ($this->complexity / 10) - self::ADJUST;
-        $tempPassword = '';
+            $value = (rand(0, 100) / 100);
+            if ($value <= ($probabilityToChange / 2)) {
+                $password .= self::WORD_SEPARATOR;
+            }
+        }
 
         foreach (str_split($password) as $key => $character) {
             $value = (rand(0, 100) / 100);
 
-            if ($value <= $probabilityToChange) {
+            if ($value <= $probabilityToChange && $character !== self::WORD_SEPARATOR) {
                 $tempPassword .= CharMap::transformLetter($character);
                 continue;
             }
