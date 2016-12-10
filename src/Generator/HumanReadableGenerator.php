@@ -3,12 +3,16 @@
 namespace Generator;
 
 use Exception\EmptyWordsException;
+use Map\CharMap;
+use Validator\PasswordValidator;
 
 /**
  * Class HumanReadableGenerator
  */
 final class HumanReadableGenerator implements PasswordGenerator
 {
+    const ADJUST = 0.05;
+
     /**
      * @var \SplQueue
      */
@@ -61,6 +65,22 @@ final class HumanReadableGenerator implements PasswordGenerator
             $password .= $this->words->pop();
         }
 
+        $probabilityToChange = ($this->complexity / 10) - self::ADJUST;
+        $tempPassword = '';
+
+        foreach (str_split($password) as $key => $character) {
+            $value = (rand(0, 100) / 100);
+
+            if ($value <= $probabilityToChange) {
+                $tempPassword .= CharMap::transformLetter($character);
+                continue;
+            }
+
+            $tempPassword .= $character;
+        }
+
+        $password = $tempPassword . $this->getMissingChars($password);
+
         return $password;
     }
 
@@ -76,5 +96,20 @@ final class HumanReadableGenerator implements PasswordGenerator
         }
 
         return $size;
+    }
+
+    /**
+     * @param string $password
+     * @return string
+     */
+    private function getMissingChars(string $password):string
+    {
+        $missingChars = '';
+
+        for ($i = 0; $i < (PasswordValidator::REQUIRED_PASSWORD_SIZE - strlen($password)); $i++) {
+            $missingChars .= CharMap::getRandomChar();
+        }
+
+        return $missingChars;
     }
 }
