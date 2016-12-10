@@ -25,5 +25,10 @@ class HumanReadableGeneratorTest extends TestCase
         (new HumanReadableGenerator([], 1, 1));
     }
 
+    public function testPasswordSize()
+    {
+        $password = (new HumanReadableGenerator(['word', 'test', 'newTest'], 7, 1))->generate();
 
+        $this->assertGreaterThan(7, strlen($password));
+    }
 }

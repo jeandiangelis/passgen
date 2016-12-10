@@ -9,8 +9,6 @@ use Exception\InvalidCharacterException;
  */
 abstract class CharMap
 {
-private $a = '~!@#$%^&*_-+=`|(){}[]:;"\'<>,.?/';
-
     const MAP = [
         'a' => ['4', '@'],
         'b' => ['|3'],

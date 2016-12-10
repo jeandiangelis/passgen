@@ -10,7 +10,7 @@ use Exception\EmptyWordsException;
 final class HumanReadableGenerator implements PasswordGenerator
 {
     /**
-     * @var array
+     * @var \SplQueue
      */
     private $words;
 
@@ -37,7 +37,14 @@ final class HumanReadableGenerator implements PasswordGenerator
             throw new EmptyWordsException();
         }
 
-        $this->words = $words;
+        shuffle($words);
+
+        $this->words = new \SplQueue();
+
+        foreach ($words as $word) {
+            $this->words->enqueue($word);
+        }
+
         $this->strength = $strength;
         $this->complexity = $complexity;
     }
@@ -47,6 +54,27 @@ final class HumanReadableGenerator implements PasswordGenerator
      */
     public function generate():string
     {
-        return 'a';
+        $password = '';
+        $wordQuantity = $this->calculatePasswordStrength();
+
+        for ($index = 0; $index < $wordQuantity; $index++) {
+            $password .= $this->words->pop();
+        }
+
+        return $password;
+    }
+
+    /**
+     * @return int
+     */
+    private function calculatePasswordStrength():int
+    {
+        $size = round(($this->strength / 10) * count($this->words));
+
+        if ($size < 1) {
+            $size = 1;
+        }
+
+        return $size;
     }
 }
