@@ -2,6 +2,8 @@
 
 namespace Generator;
 
+use Exception\EmptyWordsException;
+
 /**
  * Class HumanReadableGenerator
  */
@@ -27,9 +29,14 @@ final class HumanReadableGenerator implements PasswordGenerator
      * @param array $words
      * @param int $strength
      * @param int $complexity
+     * @throws EmptyWordsException
      */
     public function __construct(array $words, int $strength, int $complexity)
     {
+        if (empty($words)) {
+            throw new EmptyWordsException();
+        }
+
         $this->words = $words;
         $this->strength = $strength;
         $this->complexity = $complexity;
