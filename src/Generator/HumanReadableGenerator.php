@@ -11,9 +11,6 @@ use Validator\PasswordValidator;
  */
 final class HumanReadableGenerator implements PasswordGenerator
 {
-    const ADJUST = 0.09;
-    const WORD_SEPARATOR = ',';
-
     /**
      * @var \SplQueue
      */
@@ -60,32 +57,72 @@ final class HumanReadableGenerator implements PasswordGenerator
     public function generate():string
     {
         $password = '';
+        $unchangeableIndex = [];
         $wordQuantity = $this->calculatePasswordStrength();
-        $probabilityToChange = ($this->complexity / 10) - self::ADJUST;
-        $tempPassword = '';
+        $probabilityToChange = ($this->complexity / 10);
+        $tempPassword = [];
+        $hasDigit = false;
+        $hasSpecialCharacter = false;
 
         for ($index = 0; $index < $wordQuantity; $index++) {
             $password .= $this->words->pop();
 
             $value = (rand(0, 100) / 100);
-            if ($value <= ($probabilityToChange / 2)) {
-                $password .= self::WORD_SEPARATOR;
+            if ($value <= ($probabilityToChange / 3)) {
+                $password .= CharMap::getRandomChar();
+            }
+        }
+
+        $letterIndexes = array_keys(str_split($password));
+        shuffle($letterIndexes);
+
+        foreach ($letterIndexes as $key => $index) {
+            if (ctype_alpha($password[$index])
+                && $key < 3
+            ) {
+                $unchangeableIndex[] = $index;
             }
         }
 
         foreach (str_split($password) as $key => $character) {
             $value = (rand(0, 100) / 100);
 
-            if ($value <= $probabilityToChange && $character !== self::WORD_SEPARATOR) {
-                $tempPassword .= CharMap::transformLetter($character);
+            if ($value <= $probabilityToChange
+                && ctype_alpha($password[$key])
+                && !in_array($key, $unchangeableIndex)
+            ) {
+                $transformedChar = CharMap::transformLetter($password[$key]);
+                $tempPassword[] = $transformedChar;
+
+                if (is_numeric($transformedChar) && !$hasDigit) {
+                    $hasDigit = true;
+                }
+
+                if (!$hasSpecialCharacter
+                    && !is_numeric($transformedChar)
+                    && !ctype_alpha($transformedChar)
+                ) {
+                    $hasSpecialCharacter = true;
+                }
+
                 continue;
             }
 
-            $tempPassword .= $character;
+            $tempPassword[] = $password[$key];
         }
 
-        $password = $tempPassword . $this->getMissingChars($password);
+        $password = implode($tempPassword) . $this->getMissingChars($password);
+        $password[$unchangeableIndex[0]] = strtolower($password[$unchangeableIndex[0]]);
+        $password[$unchangeableIndex[1]] = strtoupper($password[$unchangeableIndex[1]]);
 
+        if (!$hasDigit) {
+            $password .= CharMap::DIGITS[array_rand(CharMap::DIGITS)];
+        }
+
+        if (!$hasSpecialCharacter) {
+            $password .= CharMap::getRandomChar();
+        }
+var_dump($password);exit;
         return $password;
     }
 

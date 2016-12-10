@@ -9,7 +9,9 @@ use Exception\InvalidCharacterException;
  */
 abstract class CharMap
 {
-    const MAP = [
+    const DIGITS = [1, 2, 3, 4 ,5 ,6 ,7 ,8 ,9 ,0];
+
+    const CHAR_MAP = [
         'a' => ['@', 'a', 'A'],
         'b' => ['|3', 'b', 'B'],
         'c' => ['(', 'c', 'C'],
@@ -45,17 +47,14 @@ abstract class CharMap
      */
     public static function transformLetter(string $char):string
     {
+        $char = strtolower($char);
+
         if (!ctype_alpha($char)) {
             throw new InvalidCharacterException();
         }
 
-        $charMap = self::MAP[$char];
-
+        $charMap = self::CHAR_MAP[$char];
         $transformedChar = $charMap[array_rand($charMap)];
-
-        if ($transformedChar === $char) {
-            return $char;
-        }
 
         return $transformedChar;
     }
