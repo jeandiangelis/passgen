@@ -3,13 +3,13 @@
 namespace Exception;
 
 /**
- * Class EmptyWordsException
+ * Class InvalidCharacterException
  */
-final class EmptyWordsException extends \Exception
+final class InvalidCharacterException extends \Exception
 {
     public function __construct(string $message = "", int $code = 0, \Exception $previous = null)
     {
-        $message = $message ?? 'Words cannot be empty';
+        $message = $message ?? 'Only letters are allowed [a-z][A-Z]';
 
         parent::__construct($message, $code, $previous);
     }

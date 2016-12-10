@@ -12,7 +12,7 @@ final class RandomGenerator implements PasswordGenerator
      *
      * @return string
      */
-    public function generate()
+    public function generate():string
     {
         return '';
     }
