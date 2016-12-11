@@ -83,7 +83,7 @@ abstract class CharMap
      */
     public static function transformToDigit(string $char):string
     {
-        $char = self::CHAR_MAP[$char];
+        $char = self::CHAR_MAP[strtolower($char)];
 
         if (is_numeric($char[0])) {
             return $char[0];
@@ -100,7 +100,7 @@ abstract class CharMap
     {
         $letters = array_keys(self::CHAR_MAP);
 
-        $letter = $uppercase
+        $letter = !$uppercase
             ? $letters[array_rand($letters)]
             : strtoupper($letters[array_rand($letters)])
         ;

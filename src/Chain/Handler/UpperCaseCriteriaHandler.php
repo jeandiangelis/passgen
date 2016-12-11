@@ -16,7 +16,7 @@ final class UpperCaseCriteriaHandler extends AbstractPasswordHandler
      */
     protected function shouldHandle(string $password):bool
     {
-        return (bool)preg_match('/A-Z/', $password);
+        return !((bool)preg_match('/A-Z/', $password));
     }
 
     /**
@@ -43,7 +43,7 @@ final class UpperCaseCriteriaHandler extends AbstractPasswordHandler
             if (count($lettersIndex) > 1) {
                 $swapped = true;
                 $randomKey = $lettersIndex[array_rand($lettersIndex)];
-                $password[$randomKey] = strtoupper($randomKey);
+                $password[$randomKey] = strtoupper($password[$randomKey]);
             }
 
             if (!$swapped) {

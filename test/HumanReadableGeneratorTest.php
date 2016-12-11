@@ -46,7 +46,7 @@ class HumanReadableGeneratorTest extends TestCase
     public function testPasswordHasSpecialCharacter()
     {
         foreach ($this->words as $words) {
-            $password = (new HumanReadableGenerator($words, rand(0, 10), rand(0, 10)))->generate();
+            $password = (new HumanReadableGenerator($words, rand(1, 10), rand(1, 10)))->generate();
             $this->assertTrue(!ctype_alnum($password));
         }
     }

@@ -113,7 +113,7 @@ final class HumanReadableGenerator implements PasswordGenerator
             $password .= $this->words->pop();
 
             $value = (rand(0, 100) / 100);
-            if ($value <= ($this->calculateProbabilityToChange() / 3)) {
+            if ($value <= ($this->calculateProbabilityToChange() / 5)) {
                 $password .= CharMap::getRandomChar();
             }
         }

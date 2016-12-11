@@ -40,10 +40,17 @@ final class LowerCaseCriteriaHandler extends AbstractPasswordHandler
                 }
             }
 
+            shuffle($lettersIndex);
+
             if (count($lettersIndex) > 1) {
-                $swapped = true;
-                $randomKey = $lettersIndex[array_rand($lettersIndex)];
-                $password[$randomKey] = strtolower($randomKey);
+                $upperCount =  preg_match_all('/A-Z/', $password);
+                foreach ($lettersIndex as $index) {
+                    $isUpper = preg_match('/A-Z/', $password[$index]);
+                    if ($isUpper && $upperCount > 1) {
+                        $swapped = true;
+                        $password[$index] = strtolower($password[$index]);
+                    }
+                }
             }
 
             if (!$swapped) {
