@@ -2,9 +2,9 @@
 
 namespace Generator;
 
+use Chain\PasswordChainBuilder;
 use Exception\EmptyWordsException;
 use Map\CharMap;
-use Validator\PasswordValidator;
 
 /**
  * Class HumanReadableGenerator
@@ -58,8 +58,6 @@ final class HumanReadableGenerator implements PasswordGenerator
     {
         $password = $this->buildPasswordString();
         $tempPassword = [];
-        $hasDigit = false;
-        $hasSpecialCharacter = !ctype_alnum($password);
 
         foreach (str_split($password) as $key => $character) {
             $value = (rand(0, 100) / 100);
@@ -70,42 +68,15 @@ final class HumanReadableGenerator implements PasswordGenerator
                 $transformedChar = CharMap::transformLetter($password[$key]);
                 $tempPassword[] = $transformedChar;
 
-                if (is_numeric($transformedChar) && !$hasDigit) {
-                    $hasDigit = true;
-                }
-
-                if (!$hasSpecialCharacter
-                    && !is_numeric($transformedChar)
-                    && !ctype_alpha($transformedChar)
-                ) {
-                    $hasSpecialCharacter = true;
-                }
-
                 continue;
             }
 
             $tempPassword[] = $password[$key];
         }
 
-        $password = implode($tempPassword) . $this->generateMissingChars($password);
+        $password = implode($tempPassword);
 
-        if (!preg_match('/[A-Z]/', $password)
-            && isset($unchangeableIndex[1])
-        ) {
-            $password[$unchangeableIndex[1]] = strtoupper($password[$unchangeableIndex[1]]);
-        } elseif (!preg_match('/[A-Z]/', $password)) {
-            $password .= chr(rand(65,90));
-        }
-
-        if (!$hasDigit) {
-            $password .= CharMap::DIGITS[array_rand(CharMap::DIGITS)];
-        }
-
-        if (!$hasSpecialCharacter) {
-            $password .= CharMap::getRandomChar();
-        }
-
-        return $password;
+        return (new PasswordChainBuilder())->doChain($password);
     }
 
     /**
@@ -120,21 +91,6 @@ final class HumanReadableGenerator implements PasswordGenerator
         }
 
         return $size;
-    }
-
-    /**
-     * @param string $password
-     * @return string
-     */
-    private function generateMissingChars(string $password):string
-    {
-        $missingChars = '';
-
-        for ($i = 0; $i < (PasswordValidator::REQUIRED_PASSWORD_SIZE - strlen($password)); $i++) {
-            $missingChars .= CharMap::getRandomChar();
-        }
-
-        return $missingChars;
     }
 
     /**

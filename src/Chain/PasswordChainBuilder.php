@@ -1,14 +1,12 @@
 <?php
 
-namespace tastebay\Report;
+namespace Chain;
 
 use Chain\Handler\LowerCaseCriteriaHandler;
 use Chain\Handler\NumericCriteriaHandler;
 use Chain\Handler\PasswordLengthCriteriaHandler;
 use Chain\Handler\SpecialCharacterCriteriaHandler;
 use Chain\Handler\UpperCaseCriteriaHandler;
-use Chain\Handler\UpperCasePasswordCriteriaHandler;
-use tastebay\Report\Handler\HandlerInterface;
 
 /**
  * Class PasswordChainBuilder

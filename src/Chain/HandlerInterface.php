@@ -1,6 +1,6 @@
 <?php
 
-namespace tastebay\Report\Handler;
+namespace Chain;
 
 /**
  * Interface HandlerInterface

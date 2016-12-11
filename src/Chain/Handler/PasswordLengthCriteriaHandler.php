@@ -2,8 +2,8 @@
 
 namespace Chain\Handler;
 
+use Chain\AbstractPasswordHandler;
 use Map\CharMap;
-use tastebay\Report\Handler\AbstractPasswordHandler;
 use Validator\PasswordValidator;
 
 /**
