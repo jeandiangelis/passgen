@@ -18,16 +18,6 @@ class CharMapTest extends TestCase
         CharMap::transformLetter('*');
     }
 
-    public function testTransformLetterWithValidLetters()
-    {
-        $originalLetter = 'f';
-        $letter = CharMap::transformLetter($originalLetter);
-        $this->assertEquals($originalLetter, $letter);
-
-        $originalLetter = 'a';
-        $this->assertNotEquals($originalLetter, CharMap::transformLetter($originalLetter));
-    }
-
     public function testGetRandomChar()
     {
         $this->assertEquals('string', gettype(CharMap::getRandomChar()));

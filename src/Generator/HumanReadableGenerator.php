@@ -78,7 +78,7 @@ final class HumanReadableGenerator implements PasswordGenerator
 
         foreach ($letterIndexes as $key => $index) {
             if (ctype_alpha($password[$index])
-                && $key < 3
+                && count($unchangeableIndex) < 2
             ) {
                 $unchangeableIndex[] = $index;
             }
@@ -113,7 +113,14 @@ final class HumanReadableGenerator implements PasswordGenerator
 
         $password = implode($tempPassword) . $this->getMissingChars($password);
         $password[$unchangeableIndex[0]] = strtolower($password[$unchangeableIndex[0]]);
-        $password[$unchangeableIndex[1]] = strtoupper($password[$unchangeableIndex[1]]);
+
+        if (!preg_match('/[A-Z]/', $password)
+            && isset($unchangeableIndex[1])
+        ) {
+            $password[$unchangeableIndex[1]] = strtoupper($password[$unchangeableIndex[1]]);
+        } elseif (!preg_match('/[A-Z]/', $password)) {
+            $password .= chr(rand(65,90));
+        }
 
         if (!$hasDigit) {
             $password .= CharMap::DIGITS[array_rand(CharMap::DIGITS)];
@@ -122,7 +129,7 @@ final class HumanReadableGenerator implements PasswordGenerator
         if (!$hasSpecialCharacter) {
             $password .= CharMap::getRandomChar();
         }
-var_dump($password);exit;
+
         return $password;
     }
 
