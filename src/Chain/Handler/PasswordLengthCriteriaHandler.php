@@ -7,9 +7,9 @@ use tastebay\Report\Handler\AbstractPasswordHandler;
 use Validator\PasswordValidator;
 
 /**
- * Class PasswordLengthHandler
+ * Class PasswordLengthCriteriaHandler
  */
-final class PasswordLengthHandler extends AbstractPasswordHandler
+final class PasswordLengthCriteriaHandler extends AbstractPasswordHandler
 {
     /**
      * @param string $password

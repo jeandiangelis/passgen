@@ -6,9 +6,9 @@ use Map\CharMap;
 use tastebay\Report\Handler\AbstractPasswordHandler;
 
 /**
- * Class NumericCharHandler
+ * Class UpperCaseCriteriaHandler
  */
-final class NumericCharHandler extends AbstractPasswordHandler
+final class UpperCaseCriteriaHandler extends AbstractPasswordHandler
 {
     /**
      * @param string $password
@@ -16,13 +16,7 @@ final class NumericCharHandler extends AbstractPasswordHandler
      */
     protected function shouldHandle(string $password):bool
     {
-        foreach (str_split($password) as $char) {
-            if (is_numeric($char)) {
-                return false;
-            }
-        }
-
-        return true;
+        return (bool)preg_match('/A-Z/', $password);
     }
 
     /**
@@ -35,21 +29,25 @@ final class NumericCharHandler extends AbstractPasswordHandler
             $temp = str_split($password);
             $temp = array_keys($temp);
             shuffle($temp);
+            $swapped = false;
 
+            $lettersIndex = [];
             foreach ($temp as $key) {
                 if (ctype_alpha($password[$key])) {
-                    $char = CharMap::transformToDigit($password[$key]);
-
-                    if ($char !== '') {
-                        $password[$key] = $char;
-                    } else {
-                        $password .= CharMap::getRandomDigit();
-                    }
-
-                    break;
+                    $lettersIndex[] = $key;
                 } else {
                     continue;
                 }
+            }
+
+            if (count($lettersIndex) > 1) {
+                $swapped = true;
+                $randomKey = $lettersIndex[array_rand($lettersIndex)];
+                $password[$randomKey] = strtoupper($randomKey);
+            }
+
+            if (!$swapped) {
+                $password .= CharMap::getRandomLetter(true);
             }
         }
 

@@ -83,12 +83,28 @@ abstract class CharMap
      */
     public static function transformToDigit(string $char):string
     {
-        $char = (int) self::CHAR_MAP[$char];
+        $char = self::CHAR_MAP[$char];
 
-        if (is_numeric($char)) {
-            return $char;
+        if (is_numeric($char[0])) {
+            return $char[0];
         }
 
         return '';
+    }
+
+    /**
+     * @param bool $uppercase
+     * @return string
+     */
+    public static function getRandomLetter(bool $uppercase = false):string
+    {
+        $letters = array_keys(self::CHAR_MAP);
+
+        $letter = $uppercase
+            ? $letters[array_rand($letters)]
+            : strtoupper($letters[array_rand($letters)])
+        ;
+
+        return $letter;
     }
 }
