@@ -16,7 +16,7 @@ final class LowerCaseCriteriaHandler extends AbstractPasswordHandler
      */
     protected function shouldHandle(string $password):bool
     {
-        return (bool)preg_match('/a-z/', $password);
+        return !((bool)preg_match('/a-z/', $password));
     }
 
     /**

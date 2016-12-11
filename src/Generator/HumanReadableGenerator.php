@@ -74,9 +74,7 @@ final class HumanReadableGenerator implements PasswordGenerator
             $tempPassword[] = $password[$key];
         }
 
-        $password = implode($tempPassword);
-
-        return (new PasswordChainBuilder())->doChain($password);
+        return (new PasswordChainBuilder())->doChain(implode($tempPassword));
     }
 
     /**

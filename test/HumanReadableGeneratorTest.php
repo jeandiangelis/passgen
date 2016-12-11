@@ -60,4 +60,24 @@ class HumanReadableGeneratorTest extends TestCase
             $this->assertTrue((bool)preg_match('/[A-Z]/', $password));
         }
     }
+
+    public function testPasswordHasLowercaseChar()
+    {
+        foreach ($this->words as $words) {
+            $strength =  rand(0, 10);
+            $complexity =  rand(0, 10);
+            $password = (new HumanReadableGenerator($words, $strength, $complexity))->generate();
+            $this->assertTrue((bool)preg_match('/[a-z]/', $password));
+        }
+    }
+
+    public function testPasswordHasSpecialChar()
+    {
+        foreach ($this->words as $words) {
+            $strength =  rand(0, 10);
+            $complexity =  rand(0, 10);
+            $password = (new HumanReadableGenerator($words, $strength, $complexity))->generate();
+            $this->assertTrue(!ctype_alnum($password));
+        }
+    }
 }
