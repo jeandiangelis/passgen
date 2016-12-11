@@ -15,4 +15,10 @@ interface HandlerInterface
      * @return HandlerInterface
      */
     public function append(HandlerInterface $handler);
+
+    /**
+     * @param string $password
+     * @return string
+     */
+    public function handle(string $password):string ;
 }

@@ -23,12 +23,11 @@ final class PasswordChainBuilder
     }
 
     /**
-     * @param $order
-     * @param Collection $reportTypes
-     * @return bool
+     * @param $password
+     * @return string
      */
-    public function doChain($order, Collection $reportTypes)
+    public function doChain($password)
     {
-        return $this->chain->sendOrderReport($order, $reportTypes);
+        return $this->chain->handle($password);
     }
 }
