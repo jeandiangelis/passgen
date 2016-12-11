@@ -76,4 +76,19 @@ abstract class CharMap
     {
         return self::DIGITS[array_rand(self::DIGITS)];
     }
+
+    /**
+     * @param string $char
+     * @return string
+     */
+    public static function transformToDigit(string $char):string
+    {
+        $char = (int) self::CHAR_MAP[$char];
+
+        if (is_numeric($char)) {
+            return $char;
+        }
+
+        return '';
+    }
 }

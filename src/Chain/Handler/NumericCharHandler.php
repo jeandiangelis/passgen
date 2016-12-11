@@ -38,7 +38,15 @@ final class NumericCharHandler extends AbstractPasswordHandler
 
             foreach ($temp as $key) {
                 if (ctype_alpha($password[$key])) {
-                    //@todo implement transformToDigit
+                    $char = CharMap::transformToDigit($password[$key]);
+
+                    if ($char !== '') {
+                        $password[$key] = $char;
+                    } else {
+                        $password .= CharMap::getRandomDigit();
+                    }
+
+                    break;
                 } else {
                     continue;
                 }
