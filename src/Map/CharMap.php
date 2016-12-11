@@ -68,4 +68,12 @@ abstract class CharMap
 
         return $chars[array_rand($chars)];
     }
+
+    /**
+     * @return int
+     */
+    public static function getRandomDigit():int
+    {
+        return self::DIGITS[array_rand(self::DIGITS)];
+    }
 }

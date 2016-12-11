@@ -31,4 +31,17 @@ abstract class AbstractPasswordHandler implements HandlerInterface
      * @return bool
      */
     abstract protected function shouldHandle(string $password):bool;
+
+    /**
+     * @param string $password
+     * @return string
+     */
+    public function handle(string $password):string
+    {
+        if ($this->next) {
+            return $this->next->handle($password);
+        }
+
+        return $password;
+    }
 }

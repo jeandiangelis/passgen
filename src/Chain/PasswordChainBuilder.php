@@ -2,6 +2,8 @@
 
 namespace tastebay\Report;
 
+use Chain\Handler\NumericCharHandler;
+use Chain\Handler\PasswordLengthHandler;
 use tastebay\Report\Handler\HandlerInterface;
 
 /**
@@ -19,7 +21,10 @@ final class PasswordChainBuilder
      */
     public function __construct()
     {
-        $this->chain = '';
+        $this->chain = (new PasswordLengthHandler())
+            ->append(new NumericCharHandler())
+
+        ;
     }
 
     /**
