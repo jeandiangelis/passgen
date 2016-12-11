@@ -56,40 +56,16 @@ final class HumanReadableGenerator implements PasswordGenerator
      */
     public function generate():string
     {
-        $password = '';
-        $unchangeableIndex = [];
-        $wordQuantity = $this->calculatePasswordStrength();
-        $probabilityToChange = ($this->complexity / 10);
+        $password = $this->buildPasswordString();
         $tempPassword = [];
         $hasDigit = false;
-        $hasSpecialCharacter = false;
-
-        for ($index = 0; $index < $wordQuantity; $index++) {
-            $password .= $this->words->pop();
-
-            $value = (rand(0, 100) / 100);
-            if ($value <= ($probabilityToChange / 3)) {
-                $password .= CharMap::getRandomChar();
-            }
-        }
-
-        $letterIndexes = array_keys(str_split($password));
-        shuffle($letterIndexes);
-
-        foreach ($letterIndexes as $key => $index) {
-            if (ctype_alpha($password[$index])
-                && count($unchangeableIndex) < 2
-            ) {
-                $unchangeableIndex[] = $index;
-            }
-        }
+        $hasSpecialCharacter = !ctype_alnum($password);
 
         foreach (str_split($password) as $key => $character) {
             $value = (rand(0, 100) / 100);
 
-            if ($value <= $probabilityToChange
+            if ($value <= $this->calculateProbabilityToChange()
                 && ctype_alpha($password[$key])
-                && !in_array($key, $unchangeableIndex)
             ) {
                 $transformedChar = CharMap::transformLetter($password[$key]);
                 $tempPassword[] = $transformedChar;
@@ -111,8 +87,7 @@ final class HumanReadableGenerator implements PasswordGenerator
             $tempPassword[] = $password[$key];
         }
 
-        $password = implode($tempPassword) . $this->getMissingChars($password);
-        $password[$unchangeableIndex[0]] = strtolower($password[$unchangeableIndex[0]]);
+        $password = implode($tempPassword) . $this->generateMissingChars($password);
 
         if (!preg_match('/[A-Z]/', $password)
             && isset($unchangeableIndex[1])
@@ -151,7 +126,7 @@ final class HumanReadableGenerator implements PasswordGenerator
      * @param string $password
      * @return string
      */
-    private function getMissingChars(string $password):string
+    private function generateMissingChars(string $password):string
     {
         $missingChars = '';
 
@@ -160,5 +135,33 @@ final class HumanReadableGenerator implements PasswordGenerator
         }
 
         return $missingChars;
+    }
+
+    /**
+     * @return float
+     */
+    private function calculateProbabilityToChange():float
+    {
+        return ($this->complexity / 10);
+    }
+
+    /**
+     * @return string
+     */
+    private function buildPasswordString():string
+    {
+        $password = '';
+        $wordQuantity = $this->calculatePasswordStrength();
+
+        for ($index = 0; $index < $wordQuantity; $index++) {
+            $password .= $this->words->pop();
+
+            $value = (rand(0, 100) / 100);
+            if ($value <= ($this->calculateProbabilityToChange() / 3)) {
+                $password .= CharMap::getRandomChar();
+            }
+        }
+
+        return $password;
     }
 }
