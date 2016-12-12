@@ -25,9 +25,25 @@ class HumanReadableGeneratorTest extends TestCase
     /**
      * @expectedException \Exception\EmptyWordsException
      */
-    public function testEmptyWords()
+    public function testGenerateWithEmptyWords()
     {
         (new HumanReadableGenerator([], 1, 1));
+    }
+
+    /**
+     * @expectedException \OutOfRangeException
+     */
+    public function testGenerateWithInvalidComplexityRange()
+    {
+        (new HumanReadableGenerator(['words'], 1, -1));
+    }
+
+    /**
+     * @expectedException \OutOfRangeException
+     */
+    public function testGenerateWithInvalidStrengthRange()
+    {
+        (new HumanReadableGenerator(['words'], 124, 1));
     }
 
     public function testGenerateMatchesMinimumSize()
@@ -44,8 +60,8 @@ class HumanReadableGeneratorTest extends TestCase
     public function testGenerateHasUppercaseCharacter($wordsArray)
     {
         foreach ($wordsArray as $words) {
-            $strength =  rand(0, 10);
-            $complexity =  rand(0, 10);
+            $strength =  rand(1, 10);
+            $complexity =  rand(1, 10);
             $password = (new HumanReadableGenerator($words, $strength, $complexity))->generate();
             $this->assertTrue((bool)preg_match('/[A-Z]/', $password));
         }
@@ -58,8 +74,8 @@ class HumanReadableGeneratorTest extends TestCase
     public function testGenerateHasLowercaseChar($wordsArray)
     {
         foreach ($wordsArray as $words) {
-            $strength =  rand(0, 10);
-            $complexity =  rand(0, 10);
+            $strength =  rand(1, 10);
+            $complexity =  rand(1, 10);
             $password = (new HumanReadableGenerator($words, $strength, $complexity))->generate();
             $this->assertTrue((bool)preg_match('/[a-z]/', $password));
         }
@@ -72,8 +88,8 @@ class HumanReadableGeneratorTest extends TestCase
     public function testGenerateHasSpecialChar($wordsArray)
     {
         foreach ($wordsArray as $words) {
-            $strength =  rand(0, 10);
-            $complexity =  rand(0, 10);
+            $strength =  rand(1, 10);
+            $complexity =  rand(1, 10);
             $password = (new HumanReadableGenerator($words, $strength, $complexity))->generate();
             $this->assertTrue(!ctype_alnum($password));
         }

@@ -39,6 +39,14 @@ final class HumanReadableGenerator implements PasswordGeneratorInterface
             throw new EmptyWordsException();
         }
 
+        if ($strength <= 0
+            || $strength > 10
+            || $complexity <= 0
+            || $complexity > 10
+        ) {
+            throw new \OutOfRangeException('Complexity and strength must be greater than 0 and smaller than 11.');
+        }
+
         shuffle($words);
 
         $this->words = new \SplQueue();
