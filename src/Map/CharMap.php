@@ -99,11 +99,9 @@ abstract class CharMap
     public static function getRandomLetter(bool $uppercase = false):string
     {
         $letters = array_keys(self::CHAR_MAP);
+        $letter = $letters[array_rand($letters)];
 
-        $letter = !$uppercase
-            ? $letters[array_rand($letters)]
-            : strtoupper($letters[array_rand($letters)])
-        ;
+        $letter = !$uppercase ?: strtoupper($letter);
 
         return $letter;
     }
