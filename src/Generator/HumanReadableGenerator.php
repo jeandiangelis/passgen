@@ -9,7 +9,7 @@ use Map\CharMap;
 /**
  * Class HumanReadableGenerator
  */
-final class HumanReadableGenerator implements PasswordGenerator
+final class HumanReadableGenerator implements PasswordGeneratorInterface
 {
     /**
      * @var \SplQueue

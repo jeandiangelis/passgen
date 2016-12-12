@@ -5,7 +5,7 @@ namespace Generator;
 /**
  * Class RandomGenerator
  */
-final class RandomGenerator implements PasswordGenerator
+final class RandomGenerator implements PasswordGeneratorInterface
 {
     /**
      * Generates a random password

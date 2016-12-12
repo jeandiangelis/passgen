@@ -5,7 +5,7 @@ namespace Generator;
 /**
  * Interface PasswordGenerator
  */
-interface PasswordGenerator
+interface PasswordGeneratorInterface
 {
     /**
      * @return string
