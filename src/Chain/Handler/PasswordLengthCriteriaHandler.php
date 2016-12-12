@@ -4,20 +4,21 @@ namespace Chain\Handler;
 
 use Chain\AbstractPasswordHandler;
 use Map\CharMap;
-use Validator\PasswordValidator;
 
 /**
  * Class PasswordLengthCriteriaHandler
  */
 final class PasswordLengthCriteriaHandler extends AbstractPasswordHandler
 {
+    const REQUIRED_PASSWORD_SIZE = 6;
+
     /**
      * @param string $password
      * @return bool
      */
     protected function shouldHandle(string $password):bool
     {
-        return strlen($password) < PasswordValidator::REQUIRED_PASSWORD_SIZE;
+        return strlen($password) < self::REQUIRED_PASSWORD_SIZE;
     }
 
     /**
